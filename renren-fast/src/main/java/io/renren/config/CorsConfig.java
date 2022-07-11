@@ -19,7 +19,7 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-            .allowedOrigins("*") //原来是.allowedOriginPatterns("*")，报错
+            .allowedOrigins("*") //was .allowedOriginPatterns("*"), error
             .allowCredentials(true)
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .maxAge(3600);
