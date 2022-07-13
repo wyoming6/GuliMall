@@ -30,6 +30,13 @@ public class CouponController {
     @Autowired
     private CouponService couponService;
 
+    //Testing OpenFeign remote call from Member to Coupon
+    @RequestMapping("/member/list")
+    public R membercoupons(){
+        CouponEntity couponEntity = new CouponEntity();
+        couponEntity.setCouponName("Save $10 On Orders Over $100.");
+        return R.ok().put("coupons",Arrays.asList(couponEntity));
+    }
     /**
      * 列表
      */
