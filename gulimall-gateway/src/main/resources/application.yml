@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: youtube_route
+          uri: https://www.youtube.com/
+          predicates:
+            - Query=url, youtube
+        - id: bilibili_route
+          uri: https://www.bilibili.com/
+          predicates:
+            - Query=url, bilibili
