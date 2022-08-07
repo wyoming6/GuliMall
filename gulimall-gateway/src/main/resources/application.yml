@@ -6,7 +6,15 @@ spring:
           uri: https://www.youtube.com/
           predicates:
             - Query=url, youtube
+
         - id: bilibili_route
           uri: https://www.bilibili.com/
           predicates:
             - Query=url, bilibili
+
+        - id: admin_route
+          uri: lb://renren-fast # 负载均衡到指定服务renren-fast
+          predicates:
+          - Path=/api/**
+          filters:
+          - RewritePath=/api/?(?<segment>.*), /renren-fast/$\{segment}
