@@ -9,7 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 
 //@EnableFeignClients(basePackages = "com.atguigu.gulimall.product.feign")
-//@EnableDiscoveryClient
+@EnableDiscoveryClient
 @MapperScan("com.atguigu.gulimall.product.dao")
 @SpringBootApplication
 public class GulimallProductApplication {
