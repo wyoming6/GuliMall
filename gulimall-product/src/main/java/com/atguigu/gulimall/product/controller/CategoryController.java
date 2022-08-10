@@ -69,12 +69,13 @@ public class CategoryController {
     /**
      * 修改
      */
-//    @RequestMapping("/update")
-//    //@RequiresPermissions("product:category:update")
-//    public R update(@RequestBody CategoryEntity category){
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:category:update")
+    public R update(@RequestBody CategoryEntity category){
 //		categoryService.updateCascade(category);
-//        return R.ok();
-//    }
+        categoryService.updateById(category);
+        return R.ok();
+    }
 
 
     /**
