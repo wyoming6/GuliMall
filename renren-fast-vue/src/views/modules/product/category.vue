@@ -7,6 +7,8 @@
       show-checkbox
       node-key="catId"
       :default-expanded-keys="expandedKey"
+      draggable
+      :allow-drop="allowDrop"
     >
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -97,7 +99,8 @@ export default {
         icon: ""
       },
       dialogType: "", //add or edit
-      title: ""
+      title: "",
+      maxLevel: 0 //子节点的最大level
     };
   },
   methods: {
@@ -121,7 +124,7 @@ export default {
 
       //清空回显数据
       this.category.catId = null;
-      this.category.name="";
+      this.category.name = "";
       this.category.icon = "";
       this.category.productUnit = "";
       this.category.showStatus = 1;
@@ -239,6 +242,34 @@ export default {
         .catch(() => {});
 
       console.log("remove", node, data);
+    },
+
+    allowDrop(draggingNode, dropNode, type) {
+      console.log("allowDrop:", draggingNode, dropNode, type);
+
+      // 求子节点的最大level，结果存放在maxLevel
+      this.countNodeLevel(draggingNode.data);
+
+      // 当前节点的深度 = 当前拖动的节点的子节点的最大level - 当前拖动的节点的level + 1
+      let depth = this.maxLevel - draggingNode.data.catLevel + 1;
+
+      if (type == "inner") {
+        return (depth + dropNode.level) <= 3;
+      } else {
+        return (depth + dropNode.parent.level) <= 3;
+      }
+    },
+
+    // 求出node的子节点的最大level
+    countNodeLevel(node) {
+      if (node.children != null && node.children.length > 0) {
+        for (let i = 0; i < node.children.length; i++) {
+          if (node.children[i].catLevel > this.maxLevel) {
+            this.maxLevel = node.children[i].catLevel;
+          }
+          this.countNodeLevel(node.children[i]);
+        }
+      }
     }
   },
 
