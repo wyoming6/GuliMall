@@ -1,5 +1,12 @@
 <template>
   <div>
+    <el-switch
+      v-model="draggable"
+      active-text="Enable Drag-and-Drop"
+      inactive-text="Unenable Drag-and-Drop"
+    >
+    </el-switch>
+    <el-button v-if="draggable" @click="batchSave">Batch Save</el-button>
     <el-tree
       :data="menus"
       :props="defaultProps"
@@ -7,7 +14,7 @@
       show-checkbox
       node-key="catId"
       :default-expanded-keys="expandedKey"
-      draggable
+      :draggable="draggable"
       :allow-drop="allowDrop"
       @node-drop="handleDrop"
     >
@@ -102,7 +109,9 @@ export default {
       dialogType: "", //add or edit
       title: "",
       maxLevel: 0, //子节点的最大level
-      updateNodes: []
+      updateNodes: [],
+      draggable: false,
+      pCid: []
     };
   },
   methods: {
@@ -253,7 +262,8 @@ export default {
       this.countNodeLevel(draggingNode.data);
 
       // 当前节点的深度 = 当前拖动的节点的子节点的最大level - 当前拖动的节点的level + 1
-      let depth = this.maxLevel - draggingNode.data.catLevel + 1;
+      // let depth = this.maxLevel - draggingNode.data.catLevel + 1;
+      let depth = Math.abs(this.maxLevel - draggingNode.level) + 1;
 
       if (type == "inner") {
         return depth + dropNode.level <= 3;
@@ -264,12 +274,12 @@ export default {
 
     // 求出node的子节点的最大level
     countNodeLevel(node) {
-      if (node.children != null && node.children.length > 0) {
-        for (let i = 0; i < node.children.length; i++) {
-          if (node.children[i].catLevel > this.maxLevel) {
-            this.maxLevel = node.children[i].catLevel;
+      if (node.childNodes != null && node.childNodes.length > 0) {
+        for (let i = 0; i < node.childNodes.length; i++) {
+          if (node.childNodes[i].level > this.maxLevel) {
+            this.maxLevel = node.childNodes[i].level;
           }
-          this.countNodeLevel(node.children[i]);
+          this.countNodeLevel(node.childNodes[i]);
         }
       }
     },
@@ -291,6 +301,7 @@ export default {
         pCid = dropNode.data.catId;
         siblings = dropNode.childNodes;
       }
+      this.pCid.push(pCid); //即使二者同名，但是是不同的
 
       //find the new sorting order of the draggingNode
       for (let i = 0; i < siblings.length; i++) {
@@ -313,8 +324,6 @@ export default {
           this.updateNodes.push({ catId: siblings[i].data.catId, sort: i });
         }
       }
-      
-
       console.log("updateNodes:", this.updateNodes);
     },
 
@@ -329,6 +338,27 @@ export default {
           this.updateChildNodeLevel(node.childNodes[i]);
         }
       }
+    },
+
+    batchSave() {
+      this.$http({
+        url: this.$http.adornUrl("/product/category/update/sort"),
+        method: "post",
+        data: this.$http.adornData(this.updateNodes, false)
+      }).then(({ data }) => {
+        this.$message({
+          message: "Menu reordered.",
+          type: "success"
+        });
+        //refresh webpage after removing items
+        this.getMenus();
+        //expand parent node after refreshing the page
+        this.expandedKey = this.pCid;
+        //reset
+        this.updateNodes = [];
+        this.maxLevel = 0;
+        // this.pCid = 0;
+      });
     }
   },
 
