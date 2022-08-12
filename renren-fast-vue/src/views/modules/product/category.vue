@@ -7,6 +7,7 @@
     >
     </el-switch>
     <el-button v-if="draggable" @click="batchSave">Batch Save</el-button>
+    <el-button type="danger" @click="batchDelete">Batch Delete</el-button>
     <el-tree
       :data="menus"
       :props="defaultProps"
@@ -17,6 +18,7 @@
       :draggable="draggable"
       :allow-drop="allowDrop"
       @node-drop="handleDrop"
+      ref="menuTree"
     >
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
@@ -359,6 +361,50 @@ export default {
         this.maxLevel = 0;
         // this.pCid = 0;
       });
+    },
+    batchDelete() {
+      let catIds = [];
+      let checkNodesNames = [];
+      let checkedNodes = this.$refs.menuTree.getCheckedNodes();
+      console.log("checkedNodes", checkedNodes);
+
+      for (let i = 0; i < checkedNodes.length; i++) {
+        catIds.push(checkedNodes[i].catId);
+      }
+
+      for(let i = 0; i< checkedNodes.length;i++){
+        checkNodesNames.push(checkedNodes[i].name);
+      }
+      //A message box
+      this.$confirm(
+        `This will permanently delete the item: ${checkNodesNames}. Continue?`,
+        "Warning",
+        {
+          confirmButtonText: "OK",
+          cancelButtonText: "Cancel",
+          type: "warning"
+        }
+      )
+        .then(() => {
+          //if you choose "OK"
+          //logical deletion
+          this.$http({
+            url: this.$http.adornUrl("/product/category/delete"),
+            method: "post",
+            data: this.$http.adornData(catIds, false)
+          }).then(({ data }) => {
+            //pop up a message if operation is successful
+            this.$message({
+              message: "Delete completed.",
+              type: "success"
+            });
+            //refresh webpage after removing items
+            this.getMenus();
+            //expand parent node after refreshing the page
+            // this.expandedKey = [node.parent.data.catId];
+          });
+        })
+        .catch(() => {}); //if you choose "Cancel"
     }
   },
 
