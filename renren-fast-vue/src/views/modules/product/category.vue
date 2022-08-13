@@ -400,8 +400,6 @@ export default {
             });
             //refresh webpage after removing items
             this.getMenus();
-            //expand parent node after refreshing the page
-            // this.expandedKey = [node.parent.data.catId];
           });
         })
         .catch(() => {}); //if you choose "Cancel"
