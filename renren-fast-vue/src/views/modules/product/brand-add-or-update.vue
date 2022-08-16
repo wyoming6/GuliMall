@@ -8,7 +8,8 @@
       <el-input v-model="dataForm.name" placeholder=""></el-input>
     </el-form-item>
     <el-form-item label="Brand Logo Storage Directory" prop="logo">
-      <el-input v-model="dataForm.logo" placeholder=""></el-input>
+      <single-upload v-model="dataForm.logo"></single-upload>
+      <!-- <el-input v-model="dataForm.logo" placeholder=""></el-input> -->
     </el-form-item>
     <el-form-item label="Introduction" prop="descript">
       <el-input v-model="dataForm.descript" placeholder=""></el-input>
@@ -32,7 +33,10 @@
 </template>
 
 <script>
+import singleUpload from "@/components/upload/singleUpload"
+// import singleUpload from '../../../components/upload/singleUpload.vue'
   export default {
+  components: { singleUpload },
     data () {
       return {
         visible: false,

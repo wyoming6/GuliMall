@@ -13,7 +13,7 @@ spring:
             - Query=url, bilibili
 
         # target: http://localhost:10000/product/category/list/tree
-        # replaced: http://localhost:88/api/product/category/list/tree
+        # replace with: http://localhost:88/api/product/category/list/tree
         - id: product_route
           uri: lb://gulimall-product
           predicates:
@@ -21,12 +21,22 @@ spring:
           filters:
             - RewritePath=/api/?(?<segment>.*), /$\{segment}
 
+        # target: http://localhost:30000/oss/policy
+        # replace with: http://localhost:88/api/thirdparty/oss/policy
+        - id: third_party_route
+          uri: lb://gulimall-third-party
+          predicates:
+            - Path=/api/thirdparty/**
+          filters:
+            - RewritePath=/api/thirdparty/?(?<segment>.*), /$\{segment}
+
         # target: http://localhost:8000/renren-fast/captcha.jpg
-        # replaced: http://localhost:88/api/captcha.jpg
+        # replace with: http://localhost:88/api/captcha.jpg
         - id: admin_route
           uri: lb://renren-fast # 负载均衡到指定服务renren-fast
           predicates:
-          - Path=/api/**
+            - Path=/api/**
           filters:
-          - RewritePath=/api/?(?<segment>.*), /renren-fast/$\{segment}
+            - RewritePath=/api/?(?<segment>.*), /renren-fast/$\{segment}
+
 

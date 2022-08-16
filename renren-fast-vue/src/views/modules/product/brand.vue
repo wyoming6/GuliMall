@@ -82,7 +82,7 @@
             v-model="scope.row.showStatus"
             active-color="#13ce66"
             inactive-color="#ff4949"
-            :active-value="1" 
+            :active-value="1"
             :inactive-value="0"
             @change="updateBrandStatus(scope.row)"
           ></el-switch>
@@ -171,7 +171,7 @@ export default {
   methods: {
     updateBrandStatus(data) {
       console.log("brand status:", data);
-      let {brandId,showStatus} = data;
+      let { brandId, showStatus } = data;
       this.$http({
         url: this.$http.adornUrl("/product/brand/update"),
         method: "post",
@@ -181,12 +181,12 @@ export default {
         // 数据库中show_status是tinyint类型，所以这里要进行转换：showStatus=true => showStatus=1
         // data: this.$http.adornData({brandId,showStatus:showStatus?1:0}, false)
         // 由于switch组件配置了:active-value="1" :inactive-value="0"，将数值0/1和showStatus绑定，这里就不需要转换showStatus的类型了
-        data: this.$http.adornData({brandId,showStatus}, false)
+        data: this.$http.adornData({ brandId, showStatus }, false)
       }).then(({ data }) => {
         this.$message({
           type: "success",
-          message:"Brand show status updated."
-        })
+          message: "Brand show status updated."
+        });
       });
     },
     // 获取数据列表
