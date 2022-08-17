@@ -61,8 +61,16 @@
         prop="logo"
         header-align="center"
         align="center"
-        label="Logo Storage Address"
+        label="Logo"
       >
+        <template slot-scope="scope">
+          <!-- <el-image
+            style="width: 100px; height: 80px"
+            :src="scope.row.logo"
+            fit="fill"
+          ></el-image> -->
+          <img :src="scope.row.logo" style="width: 100px; height: 80px">
+        </template>
       </el-table-column>
       <el-table-column
         prop="descript"
@@ -92,14 +100,14 @@
         prop="firstLetter"
         header-align="center"
         align="center"
-        label="Initial"
+        label="Search by Initials"
       >
       </el-table-column>
       <el-table-column
         prop="sort"
         header-align="center"
         align="center"
-        label="Order"
+        label="Sort"
       >
       </el-table-column>
       <el-table-column
