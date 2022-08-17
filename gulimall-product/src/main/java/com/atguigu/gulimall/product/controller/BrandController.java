@@ -65,22 +65,23 @@ public class BrandController {
      */
     @RequestMapping("/save")
     //@RequiresPermissions("product:brand:save")
-    public R save(@Valid @RequestBody BrandEntity brand,BindingResult result){
-        if(result.hasErrors()){
-            Map<String,String> map = new HashMap<>();
-            //获取校验的错误结果
-            result.getFieldErrors().forEach((item)->{
-                //FieldError 获取到错误提示（优先使用自定义配置的；自己没有配置就用ValidationMesssages.properties中规定的）
-                String message = item.getDefaultMessage();
-                //获取出错的属性的名字
-                String field = item.getField();
-                map.put(field,message);
-            });
-
-            return R.error(400,"Illegal input").put("data",map);
-        }else {
-            brandService.save(brand);
-        }
+    public R save(@Valid @RequestBody BrandEntity brand/*,BindingResult result*/){
+//        if(result.hasErrors()){
+//            Map<String,String> map = new HashMap<>();
+//            //获取校验的错误结果
+//            result.getFieldErrors().forEach((item)->{
+//                //FieldError 获取到错误提示（优先使用自定义配置的；自己没有配置就用ValidationMesssages.properties中规定的）
+//                String message = item.getDefaultMessage();
+//                //获取出错的属性的名字
+//                String field = item.getField();
+//                map.put(field,message);
+//            });
+//
+//            return R.error(400,"Illegal input").put("data",map);
+//        }else {
+//
+//        }
+        brandService.save(brand);
         return R.ok();
     }
 
