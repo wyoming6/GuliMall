@@ -1,5 +1,9 @@
 package com.atguigu.gulimall.product.entity;
 
+import com.atguigu.common.valid.AddGroup;
+import com.atguigu.common.valid.ListValue;
+import com.atguigu.common.valid.UpdateGroup;
+import com.atguigu.common.valid.UpdateStatusGroup;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -25,18 +29,20 @@ public class BrandEntity implements Serializable {
 	/**
 	 * Brand ID
 	 */
+	@NotNull(message = "Must designate brand ID when updating brand", groups = {UpdateGroup.class})
+	@Null(message = "Must not designate brand ID when creating brand", groups = {AddGroup.class})
 	@TableId
 	private Long brandId;
 	/**
 	 * Brand name
 	 */
-	@NotBlank(message="Brand name must not be blank.")
+	@NotBlank(message="Brand name must not be blank.", groups = {AddGroup.class, UpdateGroup.class})
 	private String name;
 	/**
 	 * Brand logo storage address
 	 */
-	@NotEmpty
-	@URL(message="Must be a valid url.")
+	@NotBlank(groups = {AddGroup.class})
+	@URL(message="Must be a valid url.",groups = {AddGroup.class, UpdateGroup.class})
 	private String logo;
 	/**
 	 * Brand description
@@ -45,18 +51,20 @@ public class BrandEntity implements Serializable {
 	/**
 	 * Whether brand appears or not in brand management system
 	 */
+	@NotNull(groups = {AddGroup.class, UpdateStatusGroup.class})
+	@ListValue(vals={0,1}, groups = {AddGroup.class, UpdateStatusGroup.class})
 	private Integer showStatus;
 	/**
 	 * Brand name initial
 	 */
-	@NotEmpty
-	@Pattern(regexp = "/^[a-zA-Z]$/",message = "An initial must be an alphabet letter")//自定义校验规则
+	@NotEmpty(groups = {AddGroup.class})
+	@Pattern(regexp = "^[a-zA-Z]$",message = "An initial must be an alphabet letter", groups = {AddGroup.class, UpdateGroup.class})//自定义校验规则
 	private String firstLetter;
 	/**
 	 * Sort
 	 */
-	@NotNull
-	@Min(value=0,message="Sorting number must be an integer greater than or equal to 0.")
+	@NotNull(groups = {AddGroup.class})
+	@Min(value=0,message="Sorting number must be an integer greater than or equal to 0.",groups = {AddGroup.class, UpdateGroup.class})
 	private Integer sort;
 
 }

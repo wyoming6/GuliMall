@@ -89,8 +89,8 @@ export default {
         sort: [
           {
             validator: (rule, value, callback) => {
-              if (value == "") {
-                callback(new Error("Field required"));
+              if (value ==="") {
+                callback(new Error("Field required!!"));
               } else if (!Number.isInteger(value) || value < 0) {
                 callback(new Error("Must be a positive integer or be zero"));
               } else {

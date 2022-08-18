@@ -181,7 +181,7 @@ export default {
       console.log("brand status:", data);
       let { brandId, showStatus } = data;
       this.$http({
-        url: this.$http.adornUrl("/product/brand/update"),
+        url: this.$http.adornUrl("/product/brand/update/status"),
         method: "post",
         // data: this.$http.adornData({brandId:brandId,showStatus:showStatus}, false)
         // key和value相同，可以简写成以下形式：

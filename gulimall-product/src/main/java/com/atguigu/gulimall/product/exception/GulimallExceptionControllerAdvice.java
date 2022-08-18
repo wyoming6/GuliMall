@@ -37,6 +37,7 @@ public class GulimallExceptionControllerAdvice {
     }
     @ExceptionHandler(value=Throwable.class)
     public R handleException(Throwable throwable){
+        log.error("Error:", throwable);
         return R.error();
     }
 }
