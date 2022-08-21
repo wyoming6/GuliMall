@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="6">
-      <!--子组件向父组件发送tree-node-click事件，父组件就可以在这里绑定这个事件，并触发自己的方法treenodeclick-->  
+      <!--子组件向父组件发送tree-node-click事件，父组件就可以在这里绑定这个事件，并触发自己的方法treenodeclick-->
       <category @tree-node-click="treenodeclick"></category>
     </el-col>
 
@@ -147,6 +147,7 @@ export default {
 
   data() {
     return {
+      catId: 0,
       dataForm: {
         key: ""
       },
@@ -160,17 +161,21 @@ export default {
     };
   },
 
-
   methods: {
-    treenodeclick(data, node, component){
-        console.log("attrgroup感知到category的节点被点击",data,node,component);
-        console.log("被点击的条目id：", data.catId);
+    // 感知节点被点击
+    treenodeclick(data, node, component) {
+      console.log("attrgroup感知到category的节点被点击", data, node, component);
+      console.log("被点击的条目id：", data.catId);
+      if(node.level == 3){
+        this.catId = data.catId;
+        this.getDataList();
+      }
     },
     // 获取数据列表
     getDataList() {
       this.dataListLoading = true;
       this.$http({
-        url: this.$http.adornUrl("/product/attrgroup/list"),
+        url: this.$http.adornUrl(`/product/attrgroup/list/${this.catId}`),
         method: "get",
         params: this.$http.adornParams({
           page: this.pageIndex,
