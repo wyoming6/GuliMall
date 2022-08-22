@@ -101,18 +101,18 @@ public class AttrGroupController {
     /**
      * 信息
      */
-//    @RequestMapping("/info/{attrGroupId}")
-//    //@RequiresPermissions("product:attrgroup:info")
-//    public R info(@PathVariable("attrGroupId") Long attrGroupId){
-//		AttrGroupEntity attrGroup = attrGroupService.getById(attrGroupId);
-//
-//        Long catelogId = attrGroup.getCatelogId();
-//        Long[] path = categoryService.findCatelogPath(catelogId);
-//
-//        attrGroup.setCatelogPath(path);
-//
-//        return R.ok().put("attrGroup", attrGroup);
-//    }
+    @RequestMapping("/info/{attrGroupId}")
+    //@RequiresPermissions("product:attrgroup:info")
+    public R info(@PathVariable("attrGroupId") Long attrGroupId){
+		AttrGroupEntity attrGroup = attrGroupService.getById(attrGroupId);
+
+        Long catelogId = attrGroup.getCatelogId();
+        Long[] path = categoryService.findCatelogPath(catelogId);
+
+        attrGroup.setCatelogPath(path);
+
+        return R.ok().put("attrGroup", attrGroup);
+    }
 
 
 

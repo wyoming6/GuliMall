@@ -133,6 +133,7 @@
           ref="addOrUpdate"
           @refreshDataList="getDataList"
         ></add-or-update>
+        <!--监听来自子组件的事件refreshDataList，如果监听到，则调用getDataList-->
       </div>
     </el-col>
   </el-row>

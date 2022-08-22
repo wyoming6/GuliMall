@@ -6,7 +6,9 @@ import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.OSSException;
 import com.atguigu.gulimall.product.entity.BrandEntity;
 import com.atguigu.gulimall.product.service.BrandService;
+import com.atguigu.gulimall.product.service.CategoryService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +18,26 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
-
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class GulimallProductApplicationTests {
     @Autowired
     BrandService brandService;
 
+//    @Autowired
+//    OSSClient ossClient;
+
     @Autowired
-    OSS ossClient;
+    CategoryService categoryService;
+
+    @Test
+    public void testFindPath(){
+        Long[] catelogPath = categoryService.findCatelogPath(225L);
+        log.info("完整路径：{}", Arrays.asList(catelogPath));
+    }
 
     @Test
     public void testUpload() throws FileNotFoundException {
@@ -47,17 +59,17 @@ public class GulimallProductApplicationTests {
 
 
     }
-    @Test
-    public void testUpload1() throws FileNotFoundException {
-        String bucketName = "gulimall-dev-1";
-        String objectName = "Meng5.jpg";
-
-        InputStream inputStream = new FileInputStream("/Users/catherine_sun/Pictures/Meng1.jpg");
-        // 创建PutObject请求。
-        ossClient.putObject(bucketName, objectName, inputStream);
-        ossClient.shutdown();
-        System.out.println("File uploaded.");
-    }
+//    @Test
+//    public void testUpload1() throws FileNotFoundException {
+//        String bucketName = "gulimall-dev-1";
+//        String objectName = "Meng5.jpg";
+//
+//        InputStream inputStream = new FileInputStream("/Users/catherine_sun/Pictures/Meng1.jpg");
+//        // 创建PutObject请求。
+//        ossClient.putObject(bucketName, objectName, inputStream);
+//        ossClient.shutdown();
+//        System.out.println("File uploaded.");
+//    }
 
     @Test
     public void contextLoads() {
