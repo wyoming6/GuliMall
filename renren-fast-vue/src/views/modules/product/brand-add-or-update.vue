@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="!dataForm.brandId ? 'Add' : 'Edit'"
+    :title="!dataForm.id ? '新增' : '修改'"
     :close-on-click-modal="false"
     :visible.sync="visible"
   >
@@ -9,20 +9,19 @@
       :rules="dataRule"
       ref="dataForm"
       @keyup.enter.native="dataFormSubmit()"
-      label-width="210px"
+      label-width="140px"
     >
-      <el-form-item label="Brand Name" prop="name">
-        <el-input v-model="dataForm.name" placeholder=""></el-input>
+      <el-form-item label="品牌名" prop="name">
+        <el-input v-model="dataForm.name" placeholder="品牌名"></el-input>
       </el-form-item>
-      <el-form-item label="Brand Logo Storage Directory" prop="logo">
+      <el-form-item label="品牌logo地址" prop="logo">
+        <!-- <el-input v-model="dataForm.logo" placeholder="品牌logo地址"></el-input> -->
         <single-upload v-model="dataForm.logo"></single-upload>
-        <!-- <el-input v-model="dataForm.logo" placeholder=""></el-input> -->
       </el-form-item>
-      <el-form-item label="Introduction" prop="descript">
-        <el-input v-model="dataForm.descript" placeholder=""></el-input>
+      <el-form-item label="介绍" prop="descript">
+        <el-input v-model="dataForm.descript" placeholder="介绍"></el-input>
       </el-form-item>
-      <el-form-item label="Show or Not" prop="showStatus">
-        <!-- <el-input v-model="dataForm.showStatus" placeholder=""></el-input> -->
+      <el-form-item label="显示状态" prop="showStatus">
         <el-switch
           v-model="dataForm.showStatus"
           active-color="#13ce66"
@@ -31,26 +30,24 @@
           :inactive-value="0"
         ></el-switch>
       </el-form-item>
-      <el-form-item label="Search by Initials" prop="firstLetter">
-        <el-input v-model="dataForm.firstLetter" placeholder=""></el-input>
+      <el-form-item label="检索首字母" prop="firstLetter">
+        <el-input v-model="dataForm.firstLetter" placeholder="检索首字母"></el-input>
       </el-form-item>
-      <el-form-item label="Sort" prop="sort">
-        <!--这里只接收数字-->
-        <el-input v-model.number="dataForm.sort" placeholder=""></el-input>
+      <el-form-item label="排序" prop="sort">
+        <el-input v-model.number="dataForm.sort" placeholder="排序"></el-input>
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="visible = false">Cancel</el-button>
-      <el-button type="primary" @click="dataFormSubmit()">Confirm</el-button>
+      <el-button @click="visible = false">取消</el-button>
+      <el-button type="primary" @click="dataFormSubmit()">确定</el-button>
     </span>
   </el-dialog>
 </template>
 
 <script>
-import singleUpload from "@/components/upload/singleUpload";
-// import singleUpload from '../../../components/upload/singleUpload.vue'
+import SingleUpload from "@/components/upload/singleUpload";
 export default {
-  components: { singleUpload },
+  components: { SingleUpload },
   data() {
     return {
       visible: false,
@@ -64,21 +61,27 @@ export default {
         sort: 0
       },
       dataRule: {
-        name: [{ required: true, message: "Field required.", trigger: "blur" }],
-        logo: [{ required: true, message: "Field required.", trigger: "blur" }],
+        name: [{ required: true, message: "品牌名不能为空", trigger: "blur" }],
+        logo: [
+          { required: true, message: "品牌logo地址不能为空", trigger: "blur" }
+        ],
         descript: [
-          { required: true, message: "Field required.", trigger: "blur" }
+          { required: true, message: "介绍不能为空", trigger: "blur" }
         ],
         showStatus: [
-          { required: true, message: "Field required.", trigger: "blur" }
+          {
+            required: true,
+            message: "显示状态[0-不显示；1-显示]不能为空",
+            trigger: "blur"
+          }
         ],
         firstLetter: [
           {
             validator: (rule, value, callback) => {
               if (value == "") {
-                callback(new Error("Field required"));
+                callback(new Error("首字母必须填写"));
               } else if (!/^[a-zA-Z]$/.test(value)) {
-                callback(new Error("Must be alphabets"));
+                callback(new Error("首字母必须a-z或者A-Z之间"));
               } else {
                 callback();
               }
@@ -89,10 +92,10 @@ export default {
         sort: [
           {
             validator: (rule, value, callback) => {
-              if (value ==="") {
-                callback(new Error("Field required!!"));
-              } else if (!Number.isInteger(value) || value < 0) {
-                callback(new Error("Must be a positive integer or be zero"));
+              if (value == "") {
+                callback(new Error("排序字段必须填写"));
+              } else if (!Number.isInteger(value) || value<0) {
+                callback(new Error("排序必须是一个大于等于0的整数"));
               } else {
                 callback();
               }
