@@ -8,6 +8,7 @@ import com.atguigu.gulimall.product.entity.ProductAttrValueEntity;
 import com.atguigu.gulimall.product.service.ProductAttrValueService;
 //import com.atguigu.gulimall.product.vo.AttrGroupRelationVo;
 //import com.atguigu.gulimall.product.vo.AttrRespVo;
+import com.atguigu.gulimall.product.vo.AttrRespVo;
 import com.atguigu.gulimall.product.vo.AttrVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -68,19 +69,19 @@ public class AttrController {
 //
 //        return R.ok().put("page", page);
 //    }
-//
-//
-//    /**
-//     * 信息
-//     */
-//    @RequestMapping("/info/{attrId}")
-//    //@RequiresPermissions("product:attr:info")
-//    public R info(@PathVariable("attrId") Long attrId){
-//		//AttrEntity attr = attrService.getById(attrId);
-//        AttrRespVo respVo = attrService.getAttrInfo(attrId);
-//
-//        return R.ok().put("attr", respVo);
-//    }
+
+
+    /**
+     * 信息
+     */
+    @RequestMapping("/info/{attrId}")
+    //@RequiresPermissions("product:attr:info")
+    public R info(@PathVariable("attrId") Long attrId){
+		//AttrEntity attr = attrService.getById(attrId);
+        AttrRespVo respVo = attrService.getAttrInfo(attrId);
+
+        return R.ok().put("attr", respVo);
+    }
 
     /**
      * 保存
@@ -99,13 +100,13 @@ public class AttrController {
     /**
      * 修改
      */
-//    @RequestMapping("/update")
-//    //@RequiresPermissions("product:attr:update")
-//    public R update(@RequestBody AttrVo attr){
-//		attrService.updateAttr(attr);
-//
-//        return R.ok();
-//    }
+    @RequestMapping("/update")
+    //@RequiresPermissions("product:attr:update")
+    public R update(@RequestBody AttrVo attr){
+		attrService.updateAttr(attr);
+
+        return R.ok();
+    }
 
     ///product/attr/update/{spuId}
 //    @PostMapping("/update/{spuId}")
