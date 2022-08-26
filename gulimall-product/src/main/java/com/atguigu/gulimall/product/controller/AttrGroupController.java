@@ -44,13 +44,13 @@ public class AttrGroupController {
     @Autowired
     AttrAttrgroupRelationService relationService;
 
-//    ///product/attrgroup/attr/relation
-//    @PostMapping("/attr/relation")
-//    public R addRelation(@RequestBody List<AttrGroupRelationVo> vos){
-//
-//        relationService.saveBatch(vos);
-//        return R.ok();
-//    }
+    ///product/attrgroup/attr/relation
+    @PostMapping("/attr/relation")
+    public R addRelation(@RequestBody List<AttrGroupRelationVo> vos){
+
+        relationService.saveBatch(vos);
+        return R.ok();
+    }
 
 //    ///product/attrgroup/{catelogId}/withattr
 //    @GetMapping("/{catelogId}/withattr")

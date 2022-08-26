@@ -69,7 +69,7 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         this.save(attrEntity);
 
         //保存关联关系
-        if(attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode()){//只有基本属性需要保存分组信息；销售属性不需要
+        if(attr.getAttrType() == ProductConstant.AttrEnum.ATTR_TYPE_BASE.getCode() && attr.getAttrGroupId()!=null){//只有基本属性需要保存分组信息；销售属性不需要
             AttrAttrgroupRelationEntity attrAttrgroupRelationEntity = new AttrAttrgroupRelationEntity();
             attrAttrgroupRelationEntity.setAttrGroupId(attr.getAttrGroupId());
             attrAttrgroupRelationEntity.setAttrId(attrEntity.getAttrId());
@@ -106,12 +106,10 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
             if("base".equalsIgnoreCase(type)){
                 //在AttrAttrgroupRelation表中查找attr_id对应的attrGroup_id，进而找到attrGroupName
                 AttrAttrgroupRelationEntity attr_id = attrAttrgroupRelationDao.selectOne(new QueryWrapper<AttrAttrgroupRelationEntity>().eq("attr_id", attrEntity.getAttrId()));
-                if (attr_id != null) {
+                if (attr_id != null && attr_id.getAttrGroupId() != null) {
                     Long attrGroupId = attr_id.getAttrGroupId();
                     AttrGroupEntity attrGroupEntity = attrGroupDao.selectById(attrGroupId);
-                    if(attrGroupEntity != null){
-                        attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
-                    }
+                    attrRespVo.setGroupName(attrGroupEntity.getAttrGroupName());
                 }
             }
 
