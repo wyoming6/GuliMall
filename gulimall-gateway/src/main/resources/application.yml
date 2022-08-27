@@ -2,15 +2,15 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: youtube_route
-          uri: https://www.youtube.com/
-          predicates:
-            - Query=url, youtube
-
-        - id: bilibili_route
-          uri: https://www.bilibili.com/
-          predicates:
-            - Query=url, bilibili
+#        - id: youtube_route
+#          uri: https://www.youtube.com/
+#          predicates:
+#            - Query=url, youtube
+#
+#        - id: bilibili_route
+#          uri: https://www.bilibili.com/
+#          predicates:
+#            - Query=url, bilibili
 
         # target: http://localhost:10000/product/category/list/tree
         # replace with: http://localhost:88/api/product/category/list/tree
@@ -29,6 +29,14 @@ spring:
             - Path=/api/thirdparty/**
           filters:
             - RewritePath=/api/thirdparty/?(?<segment>.*), /$\{segment}
+
+        # member
+        - id: member_route
+          uri: lb://gulimall-member
+          predicates:
+            - Path=/api/member/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
 
         # target: http://localhost:8000/renren-fast/captcha.jpg
         # replace with: http://localhost:88/api/captcha.jpg
