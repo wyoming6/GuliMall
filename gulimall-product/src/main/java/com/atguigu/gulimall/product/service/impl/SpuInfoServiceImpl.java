@@ -1,7 +1,11 @@
 package com.atguigu.gulimall.product.service.impl;
 
+import com.atguigu.common.to.SkuReductionTo;
+import com.atguigu.common.to.SpuBoundTo;
+import com.atguigu.common.utils.R;
 import com.atguigu.gulimall.product.dao.SpuInfoDescDao;
 import com.atguigu.gulimall.product.entity.*;
+import com.atguigu.gulimall.product.feign.CouponFeignService;
 import com.atguigu.gulimall.product.service.*;
 import com.atguigu.gulimall.product.vo.*;
 import org.springframework.beans.BeanUtils;
@@ -39,6 +43,8 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
     SkuImagesService skuImagesService;
     @Autowired
     SkuSaleAttrValueService skuSaleAttrValueService;
+    @Autowired
+    CouponFeignService couponFeignService;
 
     @Override
     public PageUtils queryPage(Map<String, Object> params) {
@@ -80,11 +86,19 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
             productAttrValueEntity.setAttrValue(attr.getAttrValues());
             productAttrValueEntity.setQuickShow(attr.getShowDesc());
             productAttrValueEntity.setSpuId(spuInfoEntity.getId());
+            return productAttrValueEntity;
         }).collect(Collectors.toList());
         productAttrValueService.saveProductAttr(collect);
 
         //3. 保存SPU的积分信息，对应gulimall_sms -> sms_spu_bounds
-
+        Bounds bounds = vo.getBounds();
+        SpuBoundTo spuBoundTo = new SpuBoundTo();
+        BeanUtils.copyProperties(bounds,spuBoundTo);
+        spuBoundTo.setSpuId(spuInfoEntity.getId());
+        R r = couponFeignService.saveSpuBounds(spuBoundTo);
+        if(r.getCode() != 0){
+            log.error("Remote save SPU failed.");
+        }
         //4. 保存当前SPU对应的所有SKU信息，对应pms_sku_info, pms_sku_images, pms_sku_sale_attr_value
 
 
@@ -124,15 +138,23 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
                 //4.3 保存SKU的销售属性，对应pms_sku_sale_attr_value
                 List<Attr> attr = item.getAttr();
-                List<SkuSaleAttrValueEntity> skuSaleAttrValueEntities = attr.stream().map(attr -> {
+                List<SkuSaleAttrValueEntity> skuSaleAttrValueEntities = attr.stream().map(attr1 -> {
                     SkuSaleAttrValueEntity saleAttrValueEntity = new SkuSaleAttrValueEntity();
-                    BeanUtils.copyProperties(attr, saleAttrValueEntity);
+                    BeanUtils.copyProperties(attr1, saleAttrValueEntity);
                     saleAttrValueEntity.setSkuId(skuId);
                     return saleAttrValueEntity;
                 }).collect(Collectors.toList());
                 skuSaleAttrValueService.saveBatch(skuSaleAttrValueEntities);
 
                 //4.4 保存SKU的优惠、满减信息，对应gulimall_sms -> sms_sku_ladder, sms_sku_full_reduction, sms_member_price
+                SkuReductionTo skuReductionTo = new SkuReductionTo();
+                BeanUtils.copyProperties(item, skuReductionTo);
+                skuReductionTo.setSkuId(skuId);
+                R r1 = couponFeignService.saveSkuReduction(skuReductionTo);
+                if(r1.getCode() != 0){
+                    log.error("Remote save SKU failed.");
+                }
+
             });
         }
 

@@ -30,15 +30,19 @@ public class SpuBoundsEntity implements Serializable {
 	 */
 	private Long spuId;
 	/**
-	 * 
+	 * 成长积分
 	 */
 	private BigDecimal growBounds;
 	/**
-	 * 
+	 * 购物积分
 	 */
 	private BigDecimal buyBounds;
 	/**
-	 * 
+	 * 优惠生效情况（1111，从右到左）：
+	 * 		0 - 无优惠，成长积分不赠送；1 - 无优惠，成长积分赠送
+	 * 	    0 - 无优惠，购物积分不赠送；1 - 无优惠，购物积分赠送
+	 * 	    0 - 有优惠，成长积分不赠送；1 - 有优惠，成长积分赠送
+	 * 	    0 - 有优惠，购物积分不赠送；1 - 无优惠，购物积分赠送
 	 */
 	private Integer work;
 
