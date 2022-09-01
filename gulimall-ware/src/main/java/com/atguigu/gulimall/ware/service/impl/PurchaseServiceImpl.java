@@ -76,4 +76,32 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
         this.updateById(purchaseEntity);
     }
 
+    //receive purchase order
+    @Override
+    public void received(List<Long> ids) {
+        //更新采购单的状态及时间
+        List<PurchaseEntity> collect = ids.stream().map(id -> {
+            PurchaseEntity byId = this.getById(id);
+            return byId;
+        }).filter(entity -> {
+            return entity.getStatus() == WareConstant.PurchaseStatusEnum.CREATED.getCode() || entity.getStatus() == WareConstant.PurchaseStatusEnum.ASSIGNED.getCode();
+        }).map(entity -> {
+            entity.setStatus(WareConstant.PurchaseStatusEnum.RECEIVED.getCode());
+            entity.setUpdateTime(new Date());
+            return entity;
+        }).collect(Collectors.toList());
+
+        this.updateBatchById(collect);
+        //更新采购需求的状态
+        collect.forEach((item) -> {
+            List<PurchaseDetailEntity> detailEntities = purchaseDetailService.list(new QueryWrapper<PurchaseDetailEntity>().eq("purchase_id", item.getId()));
+            List<PurchaseDetailEntity> newDetailEntities = detailEntities.stream().map(entity -> {
+                entity.setStatus(WareConstant.PurchaseDetailStatusEnum.BUYING.getCode());
+                return entity;
+            }).collect(Collectors.toList());
+            purchaseDetailService.updateBatchById(newDetailEntities);
+        });
+
+    }
+
 }

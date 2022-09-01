@@ -2,6 +2,8 @@ package com.atguigu.gulimall.ware.service.impl;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -48,5 +50,7 @@ public class PurchaseDetailServiceImpl extends ServiceImpl<PurchaseDetailDao, Pu
 
         return new PageUtils(page);
     }
+
+
 
 }
