@@ -38,6 +38,14 @@ spring:
           filters:
             - RewritePath=/api/(?<segment>.*), /$\{segment}
 
+        # ware
+        - id: ware_route
+          uri: lb://gulimall-ware
+          predicates:
+            - Path=/api/ware/**
+          filters:
+            - RewritePath=/api/(?<segment>.*), /$\{segment}
+
         # target: http://localhost:8000/renren-fast/captcha.jpg
         # replace with: http://localhost:88/api/captcha.jpg
         - id: admin_route
