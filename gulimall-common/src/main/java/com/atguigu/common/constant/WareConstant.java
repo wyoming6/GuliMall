@@ -1,6 +1,7 @@
 package com.atguigu.common.constant;
 
 public class WareConstant {
+    //采购单状态
     public enum PurchaseStatusEnum{
         CREATED(0,"新建"),
         ASSIGNED(1,"已分配"),
@@ -23,6 +24,7 @@ public class WareConstant {
         }
     }
 
+    //采购需求状态
     public enum PurchaseDetailStatusEnum{
         CREATED(0,"新建"),
         ASSIGNED(1,"已分配"),
